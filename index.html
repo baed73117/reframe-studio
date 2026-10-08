@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07070a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2307070a'/%3E%3Ccircle cx='32' cy='21' r='7.5' fill='%23ff2bd6'/%3E%3Ccircle cx='32' cy='43' r='7.5' fill='%23ff2bd6'/%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="RE:FRAME STUDIO">
+<meta property="og:title" content="RE:FRAME STUDIO">
+<meta property="og:description" content="좋아하는 노래를, 다시 한 프레임씩. AI 그림·립싱크·키네틱 타이포그래피로 만드는 뮤직비디오 채널">
+<meta property="og:image" content="https://baed73117.github.io/reframe-studio/media/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://baed73117.github.io/reframe-studio/">
+<meta name="twitter:card" content="summary_large_image">
+<style>[hidden]{display:none!important}</style><title>RE:FRAME STUDIO</title>
+<meta name="description" content="RE:FRAME STUDIO — AI 그림, 립싱크, 키네틱 타이포그래피로 만드는 뮤직비디오 채널">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Dela+Gothic+One&family=DotGothic16&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+<style>
+/* 레이아웃: 카메라 모니터. 모든 화면에 뷰파인더 모서리와 HUD 표시, 1200px 한 줄 기둥 위에 섹션이 쌓인다 */
+:root {
+  color-scheme: dark;
+  --bg: #07070a;
+  --bg-2: #0d0d13;
+  --panel: #121219;
+  --line: rgba(236, 236, 246, .11);
+  --line-2: rgba(236, 236, 246, .24);
+  --fg: #f1f1f6;
+  --mute: #9a9aab;
+  --dim: #5f5f70;
+  --accent: #ff2bd6;
+  --accent-soft: rgba(255, 43, 214, .14);
+  --rec: #ff2a3d;
+  --f-logo: "Dela Gothic One", "Black Han Sans", sans-serif;
+  --f-disp: "Black Han Sans", "Dela Gothic One", sans-serif;
+  --f-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --f-hud: "DotGothic16", ui-monospace, "Consolas", monospace;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --fast: 160ms;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition-duration: 1ms !important; animation: none !important; } }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 400 16px/1.65 var(--f-body); -webkit-font-smoothing: antialiased; padding-inline: 20px; word-break: keep-all; overflow-wrap: break-word; }
+a { color: inherit; }
+img, video { max-width: 100%; display: block; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.wrap { max-width: 1200px; margin-inline: auto; }
+.hud { font-family: var(--f-hud); font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--mute); }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+
+/* ---------- 머리 ---------- */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; margin-inline: -20px; padding-inline: 20px; background: rgba(7, 7, 10, .78); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+.top .wrap { display: flex; align-items: center; gap: 24px; height: 64px; }
+.logo { display: flex; align-items: baseline; gap: 10px; text-decoration: none; flex: none; }
+.logo b { font: 400 22px/1 var(--f-logo); letter-spacing: .01em; }
+.logo b i { font-style: normal; color: var(--accent); }
+.logo span { font: 600 10px/1 var(--f-body); letter-spacing: .5em; color: var(--mute); }
+.nav { display: flex; gap: 4px; margin-left: auto; overflow-x: auto; scrollbar-width: none; min-width: 0; }
+.nav a { padding: 8px 12px; border-radius: 8px; text-decoration: none; font-size: 14px; color: var(--mute); white-space: nowrap; transition: color var(--fast), background var(--fast); }
+.nav a:hover { color: var(--fg); background: var(--panel); }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 10px; border: 1px solid var(--line-2); background: transparent; text-decoration: none; font-size: 15px; font-weight: 500; cursor: pointer; transition: background var(--fast), border-color var(--fast), transform var(--fast) var(--ease); }
+.btn:hover { background: var(--panel); border-color: var(--fg); }
+.btn:active { transform: scale(.97); }
+.btn.main { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.btn.main:hover { background: #fff; }
+.btn svg { width: 16px; height: 16px; fill: currentColor; }
+.top .btn { padding: 8px 14px; font-size: 14px; flex: none; }
+.recdot { width: 8px; height: 8px; border-radius: 50%; background: var(--rec); display: inline-block; animation: blink 1.2s steps(1) infinite; }
+@keyframes blink { 50% { opacity: .15; } }
+
+/* ---------- 뷰파인더 모서리 ---------- */
+.vf { position: relative; }
+.vf > .c { position: absolute; width: 22px; height: 22px; border: 0 solid var(--fg); z-index: 3; pointer-events: none; transition: transform var(--fast) var(--ease), border-color var(--fast); }
+.vf > .c.tl { left: -8px; top: -8px; border-left-width: 2px; border-top-width: 2px; }
+.vf > .c.tr { right: -8px; top: -8px; border-right-width: 2px; border-top-width: 2px; }
+.vf > .c.bl { left: -8px; bottom: -8px; border-left-width: 2px; border-bottom-width: 2px; }
+.vf > .c.br { right: -8px; bottom: -8px; border-right-width: 2px; border-bottom-width: 2px; }
+
+/* ---------- 첫 화면 ---------- */
+.hero { padding-block: 56px 40px; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 48px; align-items: center; }
+.hero h1 { font: 400 clamp(40px, 6vw, 76px)/1.08 var(--f-disp); letter-spacing: -.01em; margin-top: 18px; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero p.lead { color: var(--mute); font-size: 17px; max-width: 34em; margin: 20px 0 28px; }
+.hero .acts { display: flex; flex-wrap: wrap; gap: 10px; }
+.stats { display: flex; gap: 36px; margin-top: 40px; padding-top: 22px; border-top: 1px solid var(--line); }
+.stats div { display: flex; flex-direction: column; }
+.stats b { font: 400 34px/1 var(--f-logo); font-variant-numeric: tabular-nums; }
+.stats span { font-size: 13px; color: var(--mute); margin-top: 8px; }
+.monitor { aspect-ratio: 16 / 9; background: #000; }
+.monitor video { width: 100%; height: 100%; object-fit: cover; }
+.monitor .h { position: absolute; z-index: 2; display: flex; align-items: center; gap: 10px; font-family: var(--f-hud); font-size: 12px; letter-spacing: .16em; color: rgba(255, 255, 255, .88); text-shadow: 0 1px 6px rgba(0, 0, 0, .7); }
+.monitor .h.tl { left: 16px; top: 14px; }
+.monitor .h.tr { right: 16px; top: 14px; font-variant-numeric: tabular-nums; }
+.monitor .h.bl { left: 16px; bottom: 14px; }
+.monitor .h.br { right: 16px; bottom: 14px; }
+.monitor .now { font: 400 22px/1.1 var(--f-disp); letter-spacing: 0; text-transform: none; }
+.monitor .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(255, 255, 255, .12); z-index: 2; }
+.monitor .bar i { display: block; height: 100%; width: 0; background: var(--accent); }
+.monitor .shade { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,0) 22%, rgba(0,0,0,0) 70%, rgba(0,0,0,.6) 100%); pointer-events: none; }
+
+/* ---------- 섹션 공통 ---------- */
+section.s { padding-block: 72px 24px; scroll-margin-top: 72px; }
+.s-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 28px; }
+.s-head h2 { font: 400 clamp(30px, 4vw, 44px)/1.1 var(--f-disp); margin-top: 10px; }
+.s-head p { color: var(--mute); margin: 8px 0 0; max-width: 36em; }
+
+/* ---------- 작품 ---------- */
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line-2); background: transparent; font-size: 14px; color: var(--mute); cursor: pointer; transition: all var(--fast); }
+.chip:hover { color: var(--fg); border-color: var(--fg); }
+.chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px 28px; grid-auto-flow: dense; }
+.card.big { grid-column: span 2; }
+.card.big h3 { font-size: 34px; }
+.card { cursor: pointer; }
+.card[hidden] { display: none !important; }
+.card .frame { aspect-ratio: 16 / 9; background: #000; overflow: hidden; }
+.card .frame img, .card .frame video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 200ms, transform 500ms var(--ease); }
+.card .frame video { opacity: 0; }
+.card.on .frame video { opacity: 1; }
+.card .frame .blur { filter: blur(18px) brightness(.5); transform: scale(1.2); }
+.card .frame.tall video, .card .frame.tall img.fg { object-fit: contain; }
+.card .vf > .c { opacity: 0; transform: scale(1.25); }
+.card:hover .vf > .c, .card.on .vf > .c { opacity: 1; transform: scale(1); }
+.card .frame .tag { position: absolute; left: 10px; top: 10px; z-index: 2; font-family: var(--f-hud); font-size: 11px; letter-spacing: .14em; padding: 4px 8px; border-radius: 4px; background: rgba(0, 0, 0, .55); color: #fff; }
+.card .frame .tag.own { background: var(--accent); color: #12000e; }
+.card .meta { display: flex; justify-content: space-between; gap: 12px; margin-top: 16px; }
+.card h3 { font: 400 26px/1.15 var(--f-disp); transition: color var(--fast); }
+.card:hover h3 { color: var(--accent); }
+.card .en { font: 400 12px/1 var(--f-logo); color: var(--dim); letter-spacing: .08em; margin-top: 6px; }
+.card .side { text-align: right; flex: none; }
+.card .side .hud { font-size: 11px; }
+.card .by { color: var(--mute); font-size: 14px; margin-top: 8px; }
+.card .kinds { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.kind { font-size: 12px; padding: 3px 9px; border-radius: 6px; background: var(--panel); color: var(--mute); border: 1px solid var(--line); }
+
+/* ---------- 캐릭터 ---------- */
+.rail { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(250px, 270px); gap: 22px; overflow-x: auto; padding: 10px 10px 18px; margin-inline: -10px; scroll-snap-type: x mandatory; scrollbar-width: thin; scrollbar-color: var(--line-2) transparent; }
+.char { scroll-snap-align: start; display: flex; flex-direction: column; min-width: 0; }
+.char .pic { aspect-ratio: 4 / 5; overflow: hidden; background: var(--panel); }
+.char .pic img { width: 100%; height: 100%; object-fit: cover; transition: transform 500ms var(--ease); }
+.char:hover .pic img { transform: scale(1.04); }
+.char .pic .work { position: absolute; left: 10px; bottom: 10px; z-index: 2; font-family: var(--f-hud); font-size: 11px; letter-spacing: .12em; padding: 4px 8px; border-radius: 4px; background: rgba(0, 0, 0, .6); color: #fff; }
+.char .nm { display: flex; align-items: baseline; gap: 10px; margin-top: 16px; }
+.char .nm b { font: 400 24px/1 var(--f-disp); }
+.char .nm span { font: 400 12px/1 var(--f-logo); color: var(--dim); letter-spacing: .1em; }
+.char .role { color: var(--accent); font-size: 14px; font-weight: 500; margin-top: 6px; }
+.char p { color: var(--mute); font-size: 14px; margin: 8px 0 10px; }
+.char .traits { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+
+/* ---------- 음악 ---------- */
+.player { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: 40px; padding: 28px; border: 1px solid var(--line); border-radius: 18px; background: linear-gradient(160deg, var(--bg-2), var(--bg)); }
+.player .cover { aspect-ratio: 1; background: #000; overflow: hidden; border-radius: 10px; }
+.player .cover img { width: 100%; height: 100%; object-fit: cover; }
+.player .info { min-width: 0; display: flex; flex-direction: column; }
+.player .own { display: inline-flex; align-self: flex-start; gap: 8px; align-items: center; font-family: var(--f-hud); font-size: 11px; letter-spacing: .14em; padding: 4px 9px; border-radius: 4px; background: var(--accent); color: #12000e; }
+.player h3 { font: 400 44px/1.05 var(--f-disp); margin-top: 14px; }
+.player h3 small { font: 400 16px/1 var(--f-logo); color: var(--dim); letter-spacing: .08em; margin-left: 12px; }
+.player .cred { color: var(--mute); font-size: 14px; margin-top: 8px; }
+.ctrl { display: flex; align-items: center; gap: 16px; margin-top: 22px; }
+.play { width: 58px; height: 58px; border-radius: 50%; border: 0; background: var(--fg); color: var(--bg); display: grid; place-items: center; cursor: pointer; flex: none; transition: transform var(--fast) var(--ease), background var(--fast); }
+.play:hover { background: var(--accent); }
+.play:active { transform: scale(.94); }
+.play svg { width: 26px; height: 26px; fill: currentColor; }
+.wave { flex: 1; min-width: 0; height: 64px; cursor: pointer; touch-action: none; }
+.time { font-family: var(--f-hud); font-size: 13px; color: var(--mute); font-variant-numeric: tabular-nums; flex: none; }
+.lyr { margin-top: 22px; height: 168px; overflow-y: auto; scrollbar-width: none; mask-image: linear-gradient(180deg, transparent, #000 22%, #000 78%, transparent); padding-block: 60px; }
+.lyr p { margin: 0; padding: 4px 0; font-size: 18px; color: var(--dim); transition: color 220ms, transform 220ms var(--ease); transform-origin: 0 50%; cursor: pointer; }
+.lyr p.on { color: var(--fg); transform: scale(1.04); }
+.lyr p.on::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-right: 10px; vertical-align: 4px; }
+.note { color: var(--dim); font-size: 13px; margin-top: 16px; }
+.player .cred a { color: var(--fg); text-decoration: none; border-bottom: 1px solid var(--line-2); }
+.player .cred a:hover { color: var(--accent); border-color: var(--accent); }
+.tracks { list-style: none; margin: 20px 0 0; padding: 0; border-top: 1px solid var(--line); counter-reset: tk; }
+.tracks li { counter-increment: tk; display: grid; grid-template-columns: 28px 64px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 8px 8px; border-bottom: 1px solid var(--line); cursor: pointer; transition: background var(--fast); }
+.tracks li:hover { background: var(--panel); }
+.tracks li::before { content: counter(tk, decimal-leading-zero); font: 400 12px/1 var(--f-hud); color: var(--dim); }
+.tracks li.on::before { content: "▶"; color: var(--accent); }
+.tracks li.on b { color: var(--accent); }
+.tracks img { width: 64px; height: 36px; object-fit: cover; border-radius: 4px; }
+.tracks b { font-weight: 600; font-size: 15px; display: block; }
+.tracks small { display: block; font: 400 10px/1.4 var(--f-logo); color: var(--dim); letter-spacing: .08em; }
+.tracks .d { font: 400 12px/1 var(--f-hud); color: var(--mute); font-variant-numeric: tabular-nums; }
+.card .frame img.still { transition: transform 500ms var(--ease); }
+.card:hover .frame img.still { transform: scale(1.04); }
+.card .frame .tag.soon { background: var(--fg); color: var(--bg); }
+dialog .mv img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- 제작 기록 ---------- */
+.tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--line); margin-bottom: 30px; }
+.tab { padding: 12px 16px; border: 0; background: none; color: var(--mute); font-size: 15px; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color var(--fast), border-color var(--fast); }
+.tab:hover { color: var(--fg); }
+.tab[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); }
+.log { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 44px; }
+.log[hidden] { display: none !important; }
+.log .sum h3 { font: 400 36px/1.1 var(--f-disp); }
+.log .sum .by { color: var(--mute); margin-top: 8px; }
+.log .facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; margin-top: 24px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.log .facts div { background: var(--bg); padding: 14px 16px; }
+.log .facts b { display: block; font: 400 24px/1.1 var(--f-logo); font-variant-numeric: tabular-nums; }
+.log .facts span { font-size: 12px; color: var(--mute); }
+.steps { list-style: none; margin: 0; padding: 0; counter-reset: st; }
+.steps li { counter-increment: st; display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 4px 16px; padding: 18px 0; border-top: 1px solid var(--line); }
+.steps li:first-child { border-top: 0; padding-top: 4px; }
+.steps li::before { content: counter(st, decimal-leading-zero); font: 400 13px/1.9 var(--f-hud); color: var(--accent); letter-spacing: .1em; grid-row: span 2; }
+.steps b { font-weight: 600; font-size: 17px; }
+.steps p { margin: 0; color: var(--mute); font-size: 15px; }
+
+/* ---------- 작품 창 ---------- */
+dialog { padding: 0; border: 1px solid var(--line-2); border-radius: 18px; background: var(--bg-2); color: var(--fg); width: min(1040px, calc(100vw - 32px)); max-height: calc(100vh - 32px); overflow: auto; }
+dialog::backdrop { background: rgba(3, 3, 6, .82); backdrop-filter: blur(6px); }
+dialog .mv { aspect-ratio: 16 / 9; background: #000; }
+dialog .mv video { width: 100%; height: 100%; object-fit: contain; }
+dialog .body { padding: 26px 30px 30px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px 30px; }
+dialog h3 { font: 400 36px/1.1 var(--f-disp); }
+dialog .by { color: var(--mute); margin-top: 6px; }
+dialog .desc { grid-column: 1 / -1; margin: 0; color: #cfcfda; max-width: 46em; }
+dialog .acts { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start; }
+dialog .x { position: absolute; right: 14px; top: 14px; z-index: 3; width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(0, 0, 0, .6); cursor: pointer; display: grid; place-items: center; }
+dialog .x svg { width: 20px; height: 20px; fill: #fff; }
+
+/* ---------- 바닥 ---------- */
+footer { margin-top: 90px; padding-block: 40px 56px; border-top: 1px solid var(--line); }
+footer .wrap { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+footer .logo b { font-size: 28px; }
+footer .url { font-family: var(--f-hud); font-size: 13px; letter-spacing: .06em; color: var(--mute); user-select: all; }
+
+/* ---------- 좁은 화면 ---------- */
+@media (max-width: 960px) {
+  .hero { grid-template-columns: minmax(0, 1fr); gap: 36px; padding-top: 32px; }
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .log { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .player { grid-template-columns: minmax(0, 1fr); }
+  .player .cover { max-width: 320px; }
+}
+@media (max-width: 620px) {
+  body { padding-inline: 16px; }
+  .top { margin-inline: -16px; padding-inline: 16px; }
+  .top .wrap { gap: 12px; }
+  .top .btn span { display: none; }
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .card.big { grid-column: auto; }
+  .stats { gap: 24px; }
+  .player { padding: 18px; gap: 22px; }
+  .player h3 { font-size: 34px; }
+  dialog .body { grid-template-columns: minmax(0, 1fr); padding: 20px; }
+}
+</style>
+
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="RE:FRAME STUDIO 처음으로"><b>RE<i>:</i>FRAME</b><span>STUDIO</span></a>
+    <nav class="nav" aria-label="섹션">
+      <a href="#works">작품</a><a href="#characters">캐릭터</a><a href="#music">음악</a><a href="#logs">제작 기록</a>
+    </nav>
+    <a class="btn" href="https://youtube.com/@reframe_studio0089" target="_blank" rel="noopener"><span class="recdot"></span><span>채널</span></a>
+  </div>
+</header>
+
+<main class="wrap" id="top">
+  <!-- 첫 화면 -->
+  <section class="hero">
+    <div>
+      <div class="hud">RE:FRAME STUDIO · AI MUSIC VIDEO</div>
+      <h1>좋아하는 노래를,<br>다시 <em>한 프레임씩.</em></h1>
+      <p class="lead">AI로 그린 인물, 노래에 맞춘 립싱크, 직접 짠 키네틱 타이포그래피로 뮤직비디오를 만듭니다. 노래 한 곡마다 이야기 하나, 세계 하나.</p>
+      <div class="acts">
+        <a class="btn main" href="#works">작품 보기</a>
+        <a class="btn" href="https://youtube.com/@reframe_studio0089" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M10 15.5v-7l6 3.5-6 3.5ZM21.6 7.2a2.6 2.6 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.6 2.6 0 0 0 2.4 7.2 27 27 0 0 0 2 12a27 27 0 0 0 .4 4.8 2.6 2.6 0 0 0 1.8 1.8c1.6.4 7.8.4 7.8.4s6.2 0 7.8-.4a2.6 2.6 0 0 0 1.8-1.8A27 27 0 0 0 22 12a27 27 0 0 0-.4-4.8Z"/></svg>유튜브 채널</a>
+      </div>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="monitor vf" id="monitor">
+      <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
+      <video id="mon-v" muted playsinline autoplay preload="auto"></video>
+      <div class="shade"></div>
+      <div class="h tl">CAM A · <span id="mon-fmt">1080P60</span></div>
+      <div class="h tr"><span class="recdot"></span>REC <span id="mon-tc">00:00:00:00</span></div>
+      <div class="h bl"><span class="now" id="mon-title"></span></div>
+      <div class="h br" id="mon-idx"></div>
+      <div class="bar"><i id="mon-bar"></i></div>
+    </div>
+  </section>
+
+  <!-- 작품 -->
+  <section class="s" id="works">
+    <div class="s-head">
+      <div><div class="hud">01 · WORKS</div><h2>MV 갤러리</h2><p>마우스를 올리면 바로 움직여요. 누르면 크게 보고, 유튜브에서 전체 영상을 볼 수 있어요.</p></div>
+      <div class="chips" role="group" aria-label="작품 종류">
+        <button class="chip" data-f="all" aria-pressed="true">전체</button>
+        <button class="chip" data-f="own" aria-pressed="false">자작곡</button>
+        <button class="chip" data-f="typo" aria-pressed="false">키네틱 타이포</button>
+        <button class="chip" data-f="lip" aria-pressed="false">립싱크</button>
+        <button class="chip" data-f="short" aria-pressed="false">쇼츠·애니</button>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <!-- 캐릭터 -->
+  <section class="s" id="characters">
+    <div class="s-head"><div><div class="hud">02 · CAST</div><h2>캐릭터</h2><p>작품마다 캐릭터 시트를 먼저 정하고, 모든 장면에서 같은 얼굴과 옷을 지켜요.</p></div></div>
+    <div class="rail" id="rail"></div>
+  </section>
+
+  <!-- 음악 -->
+  <section class="s" id="music">
+    <div class="s-head"><div><div class="hud">03 · ORIGINAL SOUND</div><h2>음악</h2><p>RE:FRAME STUDIO가 직접 만든 노래예요. 목록에서 곡을 고르고, 파형을 눌러 원하는 곳부터 들어 보세요.</p></div></div>
+    <div class="player">
+      <div class="cover vf"><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i><img id="p-img" src="media/cover_saebyeok.jpg" alt=""></div>
+      <div class="info">
+        <span class="own">● ORIGINAL</span>
+        <h3><span id="p-t">새벽 4시</span><small id="p-en">4AM</small></h3>
+        <div class="cred"><span id="p-cred">작사·기획 RE:FRAME STUDIO · 2026</span> · <a id="p-yt" href="#" target="_blank" rel="noopener">MV 보기 ↗</a></div>
+        <div class="ctrl">
+          <button class="play" id="play" aria-label="재생"><svg viewBox="0 0 24 24" id="play-ic"><path d="M8 5.5v13l11-6.5L8 5.5Z"/></svg></button>
+          <canvas class="wave" id="wave" aria-label="재생 위치"></canvas>
+          <span class="time" id="time">0:00</span>
+        </div>
+        <div class="lyr" id="lyr" aria-live="off"></div>
+        <ol class="tracks" id="tracks"></ol>
+        <audio id="aud" preload="metadata"></audio>
+        <div class="note">다른 가수의 원곡을 쓴 작품은 저작권을 지키기 위해 여기서 소리를 들려 드리지 않아요. 유튜브에서 감상해 주세요.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 제작 기록 -->
+  <section class="s" id="logs">
+    <div class="s-head"><div><div class="hud">04 · PRODUCTION LOG</div><h2>제작 기록</h2><p>기획부터 렌더까지, 작품마다 실제로 거친 순서예요.</p></div></div>
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div id="logbox"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="logo" href="#top"><b>RE<i>:</i>FRAME</b><span>STUDIO</span></a>
+    <div class="url">youtube.com/@reframe_studio0089</div>
+    <div class="hud">© 2026 RE:FRAME STUDIO</div>
+  </div>
+</footer>
+
+<dialog id="dlg" aria-label="작품 자세히 보기">
+  <button class="x" id="dlg-x" aria-label="닫기"><svg viewBox="0 0 24 24"><path d="M6.4 5 12 10.6 17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6L6.4 19 5 17.6 10.6 12 5 6.4 6.4 5Z"/></svg></button>
+  <div class="mv"><video id="dlg-v" muted playsinline loop autoplay></video><img id="dlg-i" alt="" hidden></div>
+  <div class="body">
+    <div><h3 id="dlg-t"></h3><div class="by" id="dlg-by"></div></div>
+    <div class="acts"><a class="btn main" id="dlg-yt" target="_blank" rel="noopener">유튜브에서 보기</a><button class="btn" id="dlg-log">제작 기록</button></div>
+    <p class="desc" id="dlg-d"></p>
+  </div>
+</dialog>
+
+<script>
+const CH = 'https://youtube.com/@reframe_studio0089';
+// 작품 (최신순). yt: 유튜브 링크 (없으면 채널), clip: 소리 없는 미리보기
+const WORKS = [
+  { id: 'sonyeon', t: '소년만화', en: 'SHONEN MANGA', by: '원곡 QWER', date: '2026.10.08', len: '3:10', fmt: '1080P60', k: ['typo', 'lip'], kinds: ['메신저 타이포', '립싱크'], clip: 'media/clip_sonyeon.mp4', img: 'media/thumb_sonyeon.jpg', yt: CH,
+    d: '카톡, DM, 단톡방, 영상통화가 만화처럼 살아 움직이는 메신저 MV. 만화가 지망생 도하와 첫 번째 독자 새봄이 연재 탈락을 딛고 1권을 내기까지, 가사는 입력창에 노래에 맞춰 쳐지고 전송돼요.' },
+  { id: 'catch', t: '캐치 캐치', en: 'CATCH CATCH', by: 'AI 댄스 챌린지', date: '2026.10.08', len: '0:21', fmt: '9:16', tall: true, soon: true, k: ['short'], kinds: ['쇼츠·릴스', 'AI 댄스'], clip: 'media/clip_catch.mp4', img: 'media/thumb_catch.jpg', yt: CH,
+    d: 'AI가 춘 챌린지 댄스에 박자를 맞춘 쇼츠용 스티커 문구. 피드 첫 화면이 그대로 썸네일이 되도록 첫 프레임부터 제목이 보여요.' },
+  { id: 'saebyeok', t: '새벽 4시', en: '4AM', by: 'RE:FRAME STUDIO 자작곡', own: true, date: '2026.10.08', len: '3:22', fmt: '1080P60', k: ['lip', 'typo', 'own'], kinds: ['자작곡', '립싱크', '실사'], clip: 'media/clip_saebyeok.mp4', img: 'media/thumb_saebyeok.jpg', yt: 'https://youtu.be/PLUN3XZU7U4',
+    d: '불 꺼진 방에서 옥상의 해돋이까지. 이별한 새벽을 한 번의 산책으로 따라가는 자작곡 MV예요. 화면 색이 남색에서 금빛으로 바뀌는 흐름이 곧 마음의 흐름이에요.' },
+  { id: 'placebo', t: '플라시보', en: 'PLACEBO', by: 'RE:FRAME STUDIO 자작곡', own: true, date: '2026.10.08', len: '3:36', fmt: '1080P', k: ['typo', 'own'], kinds: ['자작곡', '키네틱 타이포', '흑백 잉크'], clip: 'media/clip_placebo.mp4', img: 'media/thumb_placebo.jpg', yt: 'https://youtu.be/U7kq5UDlyw8',
+    d: '달콤한 거짓말로 만든 처방전. 흑백 만화 잉크 속 소녀들 위로 가사가 약 포장, 처방전, 경고 라벨처럼 나타났다가 녹고 깨지고 삼켜져요.' },
+  { id: 'sour', t: 'SOUR GRAPES', en: 'NiziU', by: '원곡 NiziU', date: '2026.10.07', len: '3:00', fmt: '1080P60', k: ['typo'], kinds: ['키네틱 타이포', '오리지널 캐릭터'], clip: 'media/clip_sour.mp4', img: 'media/thumb_sour.jpg', yt: 'https://youtu.be/LsQb4QM6WKk',
+    d: '이솝 우화 〈여우와 신 포도〉를 저격 스코프와 캔디 광고 그래픽으로 다시 그렸어요. 달콤한 사탕 대신 손 닿지 않는 포도를 노리는 오리지널 여우 소녀 KIT, YUKI, NOIR.' },
+  { id: 'kdb', t: '킥! 드럼! 베이스! 챌린지', en: 'AI DANCE', by: 'AI 댄스 챌린지', date: '2026.10.07', len: '0:22', k: ['short'], kinds: ['쇼츠', 'AI 댄스'], img: 'media/yt/qp65ZBBYLAM.jpg', yt: 'https://youtu.be/qp65ZBBYLAM',
+    d: 'AI가 춰 본 "킥! 드럼! 베이스!" 댄스 챌린지 쇼츠예요.' },
+  { id: 'toxic', t: 'TOXIC', en: 'トキシック', by: 'RE:FRAME STUDIO 자작곡', own: true, date: '2026.10.06', len: '3:02', fmt: '1080P60', k: ['typo', 'own'], kinds: ['자작곡', '키네틱 타이포'], img: 'media/yt/9cxRcMo_2n4.jpg', yt: 'https://youtu.be/9cxRcMo_2n4',
+    d: '형광 라임빛 독과 경고 테이프. 溺れる(빠져들다)에는 액체가 차오르고 脈打つ(맥박 치다)에는 심전도 선이 뛰는, 가사의 뜻을 그대로 그래픽으로 만든 자작곡 MV예요.' },
+  { id: 'midnight', t: 'THE MIDNIGHT SHOW', en: 'ON AIR', by: 'RE:FRAME STUDIO 자작곡', own: true, date: '2026.10.06', len: '2:58', k: ['own'], kinds: ['자작곡', 'MV'], img: 'media/yt/-KJSYXz_z2E.jpg', yt: 'https://youtu.be/-KJSYXz_z2E',
+    d: '흑백 화면에 빨간 ON AIR. 한밤의 방송국에서 펼쳐지는 심야 쇼 콘셉트의 자작곡 MV예요.' },
+  { id: 'bambam', t: '밤밤밤', en: 'BAM BAM BAM', by: '원곡 RESCENE (리센느)', date: '2026.10.06', len: '3:22', k: ['typo'], kinds: ['키네틱 타이포'], img: 'media/yt/8n3x2Kog6M8.jpg', yt: 'https://youtu.be/8n3x2Kog6M8',
+    d: '벚꽃 핀 밤하늘 아래 다섯 캐릭터. 리센느 "밤밤밤"을 키네틱 타이포그래피로 만들었어요.' },
+  { id: 'quit', t: '퇴사할게여! 챌린지', en: 'AI DANCE', by: 'AI 댄스 챌린지', date: '2026.10.06', len: '0:29', k: ['short'], kinds: ['쇼츠', 'AI 댄스'], img: 'media/yt/AMD-Ik1lXxI.jpg', yt: 'https://youtu.be/AMD-Ik1lXxI',
+    d: 'AI가 춰 본 소연 "퇴사할게여!" 댄스 챌린지 쇼츠예요.' },
+  { id: 'duet', t: '둘이 된 하루', en: 'OUR DAY', by: '노래 고멧 · 팃치', date: '2026.10.05', len: '3:10', fmt: '1280×704', k: ['lip'], kinds: ['듀엣 립싱크', '실사'], clip: 'media/clip_duet.mp4', img: 'media/thumb_duet.jpg', yt: 'https://youtu.be/JY3FHFMb5cA',
+    d: '푸른 바다 앞 교복 듀엣. 여성 파트, 남성 파트, 화음을 소절마다 나눠서 두 사람이 각자의 목소리로 부르는 립싱크 MV예요.' },
+  { id: 'biiig', t: 'BiiiG', en: 'BIGBANG', by: '원곡 BIGBANG (빅뱅)', date: '2026.10.05', len: '2:45', k: ['typo'], kinds: ['키네틱 타이포'], img: 'media/yt/Xf_sz-N4yu0.jpg', yt: 'https://youtu.be/Xf_sz-N4yu0',
+    d: '라임색과 흑백 만화 그림으로 만든 빅뱅 "BiiiG" 키네틱 타이포그래피예요.' },
+  { id: 'bad', t: 'BAD 댄스 챌린지', en: 'AI DANCE', by: 'AI 댄스 챌린지', date: '2026.10.05', len: '0:29', k: ['short'], kinds: ['쇼츠', 'AI 댄스'], img: 'media/yt/MJoRBHS93oc.jpg', yt: 'https://youtu.be/MJoRBHS93oc',
+    d: 'AI가 춰 본 BAD 댄스 챌린지 쇼츠예요.' },
+  { id: 'moonfall', t: 'MOONFALL', en: '부서진 달빛 아래', by: 'RE:FRAME STUDIO 자작곡', own: true, date: '2026.10.05', len: '4:58', k: ['own'], kinds: ['자작곡', '애니 MV'], img: 'media/yt/PMH5BNaJBKY.jpg', yt: 'https://youtu.be/PMH5BNaJBKY',
+    d: '부서진 달빛 아래, 은발 소녀가 부르는 자작곡. 채널에서 가장 긴 4분 58초짜리 MV예요.' },
+  { id: 'starpost', t: '별빛 택배', en: 'STARLIGHT DELIVERY', by: 'RE:FRAME STUDIO 자작곡', own: true, date: '2026.10.04', len: '3:00', k: ['own'], kinds: ['자작곡', '애니 MV'], img: 'media/yt/Av7jKlvMhhs.jpg', yt: 'https://youtu.be/Av7jKlvMhhs',
+    d: '"별빛 택배가 도착했습니다!" 하얀 고양이 귀 소녀가 별을 배달하는 밝은 자작곡 MV예요.' },
+  { id: 'quitmv', t: '퇴사할게여', en: 'ANIMATION MV', by: '원곡 소연 (Narr. 기안84)', date: '2026.10.02', len: '0:31', k: ['short'], kinds: ['애니메이션'], img: 'media/yt/UTnZnZqRCRA.jpg', yt: 'https://youtu.be/UTnZnZqRCRA',
+    d: '소연의 "퇴사할게여"를 애니메이션으로 다시 그린 짧은 MV예요.' },
+  { id: 'amumal', t: '아무말 안해도', en: 'WITHOUT A WORD', by: 'RE:FRAME STUDIO 자작곡', own: true, date: '2026.10.02', len: '3:55', k: ['typo', 'own'], kinds: ['자작곡', '리릭 비디오'], img: 'media/yt/iIyRSIiG6RM.jpg', yt: 'https://youtu.be/iIyRSIiG6RM',
+    d: '도시 야경 앞에서 부르는 실사 리릭 비디오. 한국어 가사가 키네틱 타이포그래피로 흘러가요.' },
+  { id: 'starlight', t: '우리의 별빛 아래', en: 'UNDER OUR STARLIGHT', by: 'RE:FRAME STUDIO 자작곡', own: true, date: '2026.10.01', len: '3:42', k: ['typo', 'own'], kinds: ['자작곡', '리릭 비디오'], img: 'media/yt/pODF3-DohJo.jpg', yt: 'https://youtu.be/pODF3-DohJo',
+    d: '별이 뜬 호숫가에서 기타를 멘 그녀가 부르는 자작곡 키네틱 리릭 비디오예요.' },
+  { id: 'cheongchun', t: '청춘', en: '青春', by: 'RE:FRAME STUDIO 자작곡', own: true, date: '2026.09.29', len: '3:13', k: ['typo', 'own'], kinds: ['자작곡', '리릭 비디오'], img: 'media/yt/ODD9hlj0s2E.jpg', yt: 'https://youtu.be/ODD9hlj0s2E',
+    d: '분홍빛 노을과 마이크. "지금은 그저 숨을 쉬어 보자"를 담은 자작곡 리릭 비디오예요.' },
+];
+WORKS[0].soon = true;   // 소년만화: 유튜브 업로드 예정
+const CAST = [
+  { n: '도하', en: 'DOHA', w: '소년만화', img: 'media/char_doha.jpg', role: '만화가 지망생', p: '마감 날에도 늘 한 발 늦지만, 떨어져도 다시 펜을 드는 아이. 결국 1권을 낸다.', tr: ['청록 울프컷', '송곳니', '초크 목걸이'] },
+  { n: '새봄', en: 'SAEBOM', w: '소년만화', img: 'media/char_saebom.jpg', role: '첫 번째 독자', p: '도하의 원고를 제일 먼저 읽고 제일 크게 응원하는 단짝. "괜찮다구요."', tr: ['트윈테일', '세일러복', '응원 담당'] },
+  { n: '새벽 4시의 그녀', en: '4AM', w: '새벽 4시', img: 'media/char_dawn.jpg', role: '이별 뒤의 새벽 산책', p: '보내지 못한 메시지를 지우던 밤에서, 해 뜨는 옥상에서 "나를 사랑할게"라고 말하기까지.', tr: ['실사', '남색에서 금빛으로'] },
+  { n: '바닷가 듀엣', en: 'OUR DAY', w: '둘이 된 하루', img: 'media/char_duet.jpg', role: '푸른 바다 앞 두 사람', p: '여자는 왼쪽, 남자는 오른쪽. 듣는 사람은 입을 쉬고 숨과 눈빛으로 노래에 답한다.', tr: ['실사', '교복', '듀엣'] },
+  { n: 'KIT', en: 'RED FOX', w: 'SOUR GRAPES', img: 'media/char_kit.jpg', role: '붉은여우 · 리더', p: '사탕 산더미를 지나쳐 먼지 쌓인 신 포도 한 송이를 노리는 여우.', tr: ['라임 투톤 단발', '송곳니', '포도 패치'] },
+  { n: 'YUKI', en: 'ARCTIC FOX', w: 'SOUR GRAPES', img: 'media/char_yuki.jpg', role: '북극여우', p: '막대사탕을 문 채 포도색 후디를 휘날리는 막내.', tr: ['백금발 트윈테일', '하늘색 눈', '막대사탕'] },
+  { n: 'NOIR', en: 'SILVER FOX', w: 'SOUR GRAPES', img: 'media/char_noir.jpg', role: '은여우', p: '반쯤 감은 눈으로 모든 걸 꿰뚫어 보는 셋 중 가장 차가운 여우.', tr: ['보라 울프컷', '피어싱', '핑크 체크'] },
+  { n: '플라시보의 소녀들', en: 'PLACEBO', w: '플라시보', img: 'media/char_placebo.jpg', role: '흑백 만화 잉크', p: '거의 흑백인 세계에 네온 마젠타와 시안이 한두 점만 켜지는 고딕 소녀들.', tr: ['고딕 로리타', '동심원 눈동자', '네온 포인트'] },
+];
+const LOGS = {
+  sonyeon: { facts: [['9', '립싱크 클립'], ['47', 'AI 그림'], ['43', '가사 줄 싱크 검사'], ['60fps', '1080p 렌더']], steps: [
+    ['기획', '"만화가 지망생" 이야기와 메신저 네 가지(문자, 1:1 채팅, DM, 단톡방) 구성을 먼저 정했어요.'],
+    ['캐릭터', '도하와 새봄 캐릭터 시트 두 장. 두 사람이 화면에 나오는 비중을 반반으로 맞췄어요.'],
+    ['그림', 'Codex로 이야기 그림 17장, 립싱크 첫 장면 9장, 스티커·프로필·1권 표지 같은 메신저 소품 21장.'],
+    ['립싱크', 'RunningHub에서 20초 안팎 클립 9개를 만들고, 내 PC 그래픽카드로 4K까지 올렸어요.'],
+    ['가사 타이밍', '음성 강제 정렬로 43줄을 글자 단위로 맞추고, 어긋난 브릿지만 따로 다시 맞췄어요.'],
+    ['타이포', '자바스크립트로 만든 메신저 "RE:TALK". 가사가 노래에 맞춰 입력창에 쳐지고 전송돼요. 큰 펀치는 "할 수 있어!"와 "환하게 빛나" 두 번만.'],
+    ['검수', '싱크 검사기로 43줄 모두 통과. Codex에게 다른 눈으로 검수를 받아 고쳤어요.'],
+    ['렌더', '1080p 60fps, 11,376프레임을 한 번에.'],
+  ] },
+  saebyeok: { facts: [['자작곡', 'Suno로 완성'], ['10', '립싱크 클립'], ['45', '가사 줄'], ['60fps', '타이포 MV']], steps: [
+    ['작사·작곡', '가사를 쓰고 Suno로 곡을 완성했어요. 채널의 첫 자작곡이에요.'],
+    ['기획', '하룻밤 새벽 산책. 화면 색이 남색 → 청록 → 회청색 → 금빛으로 바뀌며 감정을 따라가요.'],
+    ['그림', '실사 캐릭터 시트 한 장을 기준으로 장면 10장. 3D처럼 보이지 않도록 사진 질감 기준을 따로 뒀어요.'],
+    ['립싱크', '립싱크 자동화 프로그램의 첫 작품. 문장이 끊기는 곳에 맞춰 20초 클립 10개로 나눴어요.'],
+    ['타이포', '"새벽 4시의 알림창". 얼굴 위치를 찾아 피해서 글자를 놓아요.'],
+    ['렌더', '립싱크 MV 1080p, 타이포 MV 1080p 60fps 두 가지 버전.'],
+  ] },
+  sour: { facts: [['22', 'AI 그림'], ['85', '가사 줄'], ['3', '오리지널 캐릭터'], ['60fps', '1080p 렌더']], steps: [
+    ['곡 고르기', '한국 유튜브 데이터를 보는 트렌드 레이더로 고른 첫 곡이에요.'],
+    ['콘셉트', '〈여우와 신 포도〉 × 저격 스코프 × 캔디 광고. 잉크, 빨강, 포도 보라, 라임, 핑크.'],
+    ['캐릭터', '실제 멤버를 닮지 않은 오리지널 여우 소녀 KIT, YUKI, NOIR.'],
+    ['그림과 영상', 'Codex로 22장을 그리고 RunningHub로 움직였어요.'],
+    ['가사 타이밍', '한국어와 영어가 섞인 85줄을 강제 정렬하고, 반복되는 후렴은 평균을 내서 더 정확하게 맞췄어요.'],
+    ['타이포', '스탬프, 스코프, 한 입 베어 물기 같은 15가지 등장 방식. 60fps로 렌더.'],
+  ] },
+  placebo: { facts: [['31', '컷'], ['10', '작화 기준 그림'], ['2', '언어 (일본어 + 한국어)'], ['1080p', '렌더']], steps: [
+    ['작화 기준', '흑백 만화 잉크 그림 10장을 기준으로 정했어요.'],
+    ['그림', 'Codex로 31컷을 모두 같은 그림체로.'],
+    ['영상', 'RunningHub 2D 셀 셰이딩으로 흑백을 지키면서 움직였어요.'],
+    ['콘셉트', '"달콤한 거짓말로 만든 처방전". Rx, 용법·용량, 경고 라벨을 그래픽으로.'],
+    ['효과', '킥 펀치, RGB 분리, 글리치, 잉크 번짐 전환을 모은 효과 키트를 새로 만들었어요.'],
+    ['자막', '일본어 가사가 주인공, 한국어 번역은 아래에 작게.'],
+  ] },
+  duet: { facts: [['7', '영상 연결'], ['2', '목소리 (여성 · 남성)'], ['3:10', '러닝타임'], ['24fps', '1280×704']], steps: [
+    ['기준 이미지', '바닷가 교복 듀엣 그림 한 장으로 모든 컷의 얼굴, 옷, 배경을 고정했어요.'],
+    ['파트표', '여성 단독, 남성 단독, 화음 구간을 소절마다 직접 들어 보고 표로 정리했어요.'],
+    ['립싱크', '들리는 목소리만 입을 움직여요. 듣는 사람은 숨과 눈 깜빡임으로 반응해요.'],
+    ['편집', '영상 7개를 원곡 한 줄기에 맞춰 이었어요. 30·120·150초는 디졸브, 나머지는 컷.'],
+  ] },
+  catch: { facts: [['9:16', '쇼츠·릴스'], ['0:21', '길이'], ['92.5', 'BPM'], ['4', '스티커 문구 묶음']], steps: [
+    ['문구', '"끝까지 보면", "중독 주의", "이게 AI라고?" 같은 쇼츠 문구를 정했어요.'],
+    ['박자', '92.5 BPM 박자에 맞춰 스티커가 톡톡 튀어나와요.'],
+    ['안전 영역', '릴스 3:4 격자에서도 잘리지 않는 자리에 글자를 놓았어요.'],
+    ['커버', '피드 첫 화면이 그대로 썸네일이 되도록 첫 프레임부터 제목을 보여 줘요.'],
+  ] },
+};
+const LYR = [[14.21,17.26,"불 꺼진 방 안에 휴대폰 빛만"],[17.84,20.94,"네 이름 위에서 멈춘 손가락"],[21.34,24.33,"보내지도 못할 말을 썼다 지우고"],[24.87,27.71,"시계는 벌써 새벽 네 시야"],[28.79,31.29,"잠들면 꿈에서도 너일까 봐"],[31.95,34.80,"겉옷 하나 걸치고 문을 나서"],[35.62,39.28,"텅 빈 막차 창에 비친 내 얼굴"],[39.44,41.52,"조금은 낯설어"],[42.64,47.09,"새벽 네 시 아무도 없는 이 거리"],[48.25,50.61,"나 혼자 걸어도 괜찮아"],[51.85,55.00,"울어도 돼 들어 줄 사람 없으니"],[55.40,57.48,"오늘만큼은 소리 내 볼게"],[57.92,59.66,"Oh 새벽 네 시"],[60.34,62.98,"식어 버린 맘을 안고서"],[63.91,67.07,"해가 뜨기 전까지만"],[67.85,71.63,"너를 그리워할게"],[74.26,76.86,"편의점 불빛 아래 혼자 앉아"],[77.54,80.36,"네가 좋아하던 우유를 골라"],[81.36,83.87,"웃기지 아직도 습관처럼"],[84.03,87.41,"두 개를 집었다 하나를 내려놔"],[88.37,91.15,"강바람이 차가워서 다행이야"],[91.47,94.74,"붉어진 눈을 핑계 댈 수 있잖아"],[95.46,97.78,"다리 위 불빛들이 하나둘"],[97.84,99.82,"꺼져 가고 있어"],[102.68,107.07,"새벽 네 시 아무도 없는 이 거리"],[108.23,110.61,"나 혼자 걸어도 괜찮아"],[111.87,115.00,"울어도 돼 들어 줄 사람 없으니"],[115.42,117.46,"오늘만큼은 소리 내 볼게"],[117.90,119.66,"Oh 새벽 네 시"],[120.32,122.97,"식어 버린 맘을 안고서"],[123.91,126.89,"해가 뜨기 전까지만"],[127.85,131.61,"너를 그리워할게"],[132.72,135.34,"괜찮다고 말하는 연습을 해"],[136.02,138.46,"수없이 되뇌던 그 말을"],[138.52,141.46,"하늘이 조금씩 밝아 오면"],[141.78,144.33,"나도 조금은 밝아질까"],[146.85,151.47,"새벽 네 시 이제야 끝나는 이 밤"],[152.38,154.70,"나 혼자 걸어도 괜찮아"],[155.12,158.86,"눈부신 첫 햇살 아래 서서"],[159.02,161.56,"마지막으로 너를 불러 볼게"],[162.05,164.25,"Oh 안녕"],[164.53,167.27,"고마웠던 날들을 안고서"],[168.01,170.69,"해가 뜨면 이제는"],[171.98,175.72,"나를 사랑할게"],[182.07,183.67,"새벽 네 시"]];      // 새벽 4시 가사 시간표 [시작, 끝, 가사]
+const TRACKS = [{"id": "saebyeok4", "t": "새벽 4시", "en": "4AM", "src": "media/music/saebyeok4.mp3", "yt": "https://youtu.be/PLUN3XZU7U4", "img": "media/cover_saebyeok.jpg", "dur": 196.8, "peaks": [0.43, 0.88, 0.91, 0.88, 0.85, 0.82, 0.64, 0.97, 0.89, 0.84, 0.9, 1.0, 0.85, 0.4, 0.63, 0.82, 0.73, 0.59, 0.84, 0.79, 0.87, 0.83, 0.83, 0.68, 0.63, 0.9, 0.79, 0.75, 0.81, 0.81, 0.8, 0.6, 0.8, 0.86, 0.76, 0.84, 0.75, 0.84, 0.77, 0.85, 0.82, 0.43, 0.37, 0.68, 0.78, 0.82, 0.78, 0.86, 0.85, 0.83, 0.82, 0.85, 0.82, 0.73, 0.84, 0.88, 0.81, 0.81, 0.81, 0.76, 0.84, 0.8, 0.79, 0.85, 0.84, 0.83, 0.82, 0.79, 0.83, 0.82, 0.6, 0.38, 0.5, 0.83, 0.78, 0.86, 0.83, 0.8, 0.81, 0.84, 0.84, 0.77, 0.87, 0.85, 0.8, 0.56, 0.79, 0.86, 0.82, 0.78, 0.85, 0.74, 0.68, 0.81, 0.84, 0.88, 0.81, 0.79, 0.83, 0.82, 0.83, 0.79, 0.83, 0.82, 0.71, 0.8, 0.85, 0.82, 0.84, 0.81, 0.82, 0.82, 0.79, 0.87, 0.68, 0.79, 0.86, 0.77, 0.85, 0.88, 0.86, 0.84, 0.84, 0.83, 0.88, 0.86, 0.84, 0.83, 0.79, 0.84, 0.81, 0.82, 0.87, 0.86, 0.9, 0.81, 0.84, 0.83, 0.85, 0.81, 0.79, 0.82, 0.87, 0.83, 0.83, 0.92, 0.88, 0.8, 0.65, 0.68, 0.56, 0.59, 0.51, 0.51, 0.71, 0.62, 0.52, 0.45, 0.58, 0.7, 0.85, 0.86, 0.87, 0.84, 0.85, 0.86, 0.8, 0.87, 0.9, 0.85, 0.86, 0.88, 0.86, 0.9, 0.88, 0.88, 0.92, 0.93, 0.39, 0.35, 0.25, 0.41, 0.37, 0.34, 0.92, 1.0, 0.94, 0.69, 0.84, 0.9, 0.81, 0.91, 0.35, 0.14, 0.07, 0.32, 0.32, 0.24, 0.14, 0.12]}, {"id": "placebo", "t": "플라시보", "en": "PLACEBO", "src": "media/music/placebo.mp3", "yt": "https://youtu.be/U7kq5UDlyw8", "img": "media/yt/U7kq5UDlyw8.jpg", "dur": 215.97, "peaks": [0.12, 0.44, 0.64, 0.67, 0.67, 0.52, 0.68, 0.68, 0.72, 0.76, 0.8, 0.78, 0.73, 0.73, 0.8, 0.78, 0.77, 0.72, 0.77, 0.7, 0.74, 0.74, 0.78, 0.74, 0.67, 0.78, 0.77, 0.78, 0.7, 0.82, 0.65, 0.67, 0.87, 0.69, 0.68, 0.71, 0.71, 0.75, 0.71, 0.64, 0.67, 0.74, 0.7, 0.72, 0.74, 0.79, 0.74, 0.72, 0.75, 0.73, 0.73, 0.67, 0.67, 0.69, 0.62, 0.75, 0.74, 0.64, 0.69, 0.74, 0.7, 0.75, 0.7, 0.7, 0.81, 0.85, 0.68, 0.74, 0.71, 0.72, 0.75, 0.76, 0.72, 0.74, 0.57, 0.74, 0.76, 0.79, 0.78, 0.72, 0.87, 0.78, 0.72, 0.73, 0.94, 0.93, 0.92, 0.93, 0.76, 0.93, 0.95, 0.76, 0.85, 0.65, 0.72, 0.68, 0.73, 0.68, 0.67, 0.74, 0.78, 0.83, 0.77, 0.76, 0.69, 0.77, 0.77, 0.72, 0.8, 0.74, 0.8, 0.68, 0.7, 0.71, 0.72, 0.76, 0.81, 0.82, 0.76, 0.75, 0.73, 0.71, 0.77, 0.71, 0.74, 0.72, 0.79, 0.72, 0.75, 0.79, 0.78, 0.95, 0.92, 0.89, 0.93, 0.87, 0.81, 0.76, 0.84, 0.77, 0.8, 0.84, 0.67, 0.79, 0.77, 0.8, 0.8, 0.82, 0.81, 0.82, 0.75, 0.74, 0.9, 0.73, 0.43, 0.77, 0.75, 0.93, 0.75, 0.76, 0.79, 0.75, 0.73, 0.9, 0.68, 0.9, 0.86, 0.82, 0.89, 0.88, 0.81, 0.85, 0.92, 0.78, 0.74, 0.75, 0.88, 0.76, 0.8, 0.8, 0.77, 0.74, 0.91, 0.83, 0.87, 0.98, 0.87, 0.83, 0.84, 0.84, 0.89, 0.88, 0.79, 0.93, 0.9, 1.0, 0.9, 0.92, 0.78, 0.62]}, {"id": "toxic", "t": "TOXIC", "en": "TOXIC", "src": "media/music/toxic.mp3", "yt": "https://youtu.be/9cxRcMo_2n4", "img": "media/yt/9cxRcMo_2n4.jpg", "dur": 181.17, "peaks": [0.26, 0.6, 0.64, 0.59, 1.0, 0.56, 0.5, 0.62, 0.61, 0.68, 0.78, 0.62, 0.54, 0.66, 0.58, 0.56, 0.59, 0.58, 0.53, 0.56, 0.56, 0.61, 0.54, 0.51, 0.53, 0.56, 0.52, 0.52, 0.52, 0.58, 0.56, 0.54, 0.57, 0.53, 0.6, 0.57, 0.56, 0.58, 0.57, 0.63, 0.63, 0.58, 0.66, 0.76, 0.57, 0.61, 0.51, 0.51, 0.54, 0.52, 0.54, 0.52, 0.54, 0.57, 0.59, 0.59, 0.58, 0.56, 0.6, 0.59, 0.57, 0.55, 0.55, 0.61, 0.54, 0.54, 0.57, 0.58, 0.58, 0.64, 0.59, 0.65, 0.6, 0.58, 0.65, 0.64, 0.66, 0.62, 0.66, 0.61, 0.59, 0.58, 0.65, 0.56, 0.61, 0.57, 0.64, 0.7, 0.63, 0.59, 0.67, 0.59, 0.67, 0.58, 0.6, 0.59, 0.48, 0.5, 0.48, 0.41, 0.5, 0.46, 0.52, 0.48, 0.48, 0.52, 0.62, 0.6, 0.6, 0.58, 0.59, 0.62, 0.61, 0.57, 0.61, 0.58, 0.57, 0.57, 0.63, 0.57, 0.58, 0.61, 0.56, 0.59, 0.56, 0.63, 0.56, 0.63, 0.59, 0.6, 0.66, 0.7, 0.57, 0.56, 0.58, 0.54, 0.55, 0.57, 0.58, 0.54, 0.56, 0.56, 0.64, 0.64, 0.61, 0.65, 0.63, 0.57, 0.59, 0.62, 0.66, 0.63, 0.64, 0.61, 0.63, 0.58, 0.56, 0.59, 0.64, 0.6, 0.57, 0.58, 0.63, 0.65, 0.66, 0.61, 0.59, 0.6, 0.62, 0.69, 0.63, 0.67, 0.69, 0.69, 0.61, 0.69, 0.61, 0.61, 0.59, 0.67, 0.65, 0.34, 0.42, 0.39, 0.59, 0.59, 0.65, 0.66, 0.67, 0.69, 0.75, 0.65, 0.67, 0.69, 0.63, 0.72, 0.66, 0.65, 0.53, 0.01]}, {"id": "moonfall", "t": "MOONFALL", "en": "MOONFALL", "src": "media/music/moonfall.mp3", "yt": "https://youtu.be/PMH5BNaJBKY", "img": "media/yt/PMH5BNaJBKY.jpg", "dur": 297.13, "peaks": [0.12, 0.16, 0.4, 0.61, 0.58, 0.44, 0.46, 0.46, 0.4, 0.48, 0.45, 0.47, 0.54, 0.68, 0.69, 0.64, 0.62, 0.61, 0.63, 0.62, 0.71, 0.68, 0.65, 0.73, 0.72, 0.65, 0.66, 0.62, 0.61, 0.67, 0.52, 0.51, 0.51, 0.53, 0.63, 0.65, 0.69, 0.56, 0.64, 0.6, 0.62, 0.64, 0.81, 0.73, 0.72, 0.72, 0.7, 0.74, 0.7, 0.76, 0.75, 0.84, 0.71, 0.8, 0.72, 0.73, 0.8, 0.76, 0.8, 0.78, 0.74, 0.77, 0.7, 0.72, 0.71, 0.69, 0.79, 0.82, 0.76, 0.72, 0.7, 0.7, 0.82, 0.74, 0.7, 0.74, 0.75, 0.69, 0.71, 0.7, 0.63, 0.66, 0.77, 0.78, 0.81, 0.73, 0.65, 0.72, 0.74, 0.79, 0.74, 0.77, 0.73, 0.73, 0.72, 0.65, 0.73, 0.52, 0.61, 0.54, 0.73, 0.68, 0.68, 0.7, 0.71, 0.7, 0.77, 0.76, 0.8, 0.7, 0.77, 0.81, 0.73, 0.77, 0.78, 0.85, 0.83, 0.77, 0.8, 0.76, 0.81, 0.83, 0.74, 0.9, 0.83, 0.95, 0.78, 0.77, 0.78, 0.85, 0.76, 0.77, 0.81, 0.81, 0.8, 0.85, 0.9, 0.78, 0.87, 0.84, 0.86, 0.74, 0.76, 0.91, 0.76, 0.87, 0.81, 0.86, 0.86, 0.9, 0.89, 0.94, 0.84, 0.88, 0.85, 0.93, 0.96, 0.81, 0.83, 0.88, 0.86, 0.79, 0.88, 1.0, 0.89, 0.92, 0.91, 0.86, 0.89, 0.83, 0.89, 0.86, 0.85, 0.9, 0.85, 0.9, 0.92, 0.92, 0.86, 0.88, 0.88, 0.55, 0.6, 0.49, 0.41, 0.37, 0.51, 0.34, 0.34, 0.72, 0.93, 0.87, 0.87, 0.93, 0.85, 0.87, 0.9, 0.89, 0.87, 0.12]}, {"id": "starpost", "t": "별빛 택배", "en": "STARLIGHT DELIVERY", "src": "media/music/starpost.mp3", "yt": "https://youtu.be/Av7jKlvMhhs", "img": "media/yt/Av7jKlvMhhs.jpg", "dur": 179.61, "peaks": [0.54, 0.56, 0.61, 0.52, 0.73, 0.58, 0.59, 0.71, 0.65, 0.67, 0.61, 0.55, 0.66, 0.64, 0.57, 0.55, 0.65, 0.64, 0.66, 0.64, 0.63, 0.68, 0.71, 0.66, 0.72, 0.81, 0.64, 0.76, 0.7, 0.78, 0.72, 0.66, 0.69, 0.67, 0.64, 0.66, 0.67, 0.72, 0.7, 0.69, 0.65, 0.7, 0.68, 0.69, 0.61, 0.64, 0.62, 0.68, 0.69, 0.75, 0.72, 0.71, 0.67, 0.67, 0.71, 0.65, 0.77, 0.75, 0.74, 0.67, 0.77, 0.72, 0.7, 0.78, 0.7, 0.64, 0.75, 0.7, 0.76, 0.76, 0.87, 0.8, 0.86, 0.79, 0.73, 0.74, 0.75, 0.74, 0.75, 0.72, 0.75, 0.75, 0.71, 0.75, 0.79, 0.73, 0.75, 0.69, 0.63, 0.76, 0.85, 0.7, 0.75, 0.82, 0.73, 0.71, 0.72, 0.8, 0.7, 0.75, 0.75, 0.71, 0.79, 0.76, 0.77, 0.8, 0.77, 0.81, 0.79, 0.75, 0.76, 0.76, 0.8, 0.85, 0.8, 0.86, 0.76, 0.85, 0.78, 0.83, 0.63, 0.8, 0.72, 0.81, 0.71, 0.7, 0.61, 0.86, 0.74, 0.76, 0.81, 0.8, 0.84, 0.75, 0.83, 0.73, 0.79, 0.95, 0.71, 0.85, 0.87, 0.79, 0.78, 0.83, 0.77, 0.8, 0.79, 0.85, 0.79, 0.81, 0.83, 0.84, 0.82, 0.88, 0.84, 0.84, 0.79, 0.77, 0.8, 0.84, 0.82, 0.84, 0.84, 0.88, 0.79, 0.87, 0.84, 0.86, 0.87, 0.83, 0.92, 0.9, 0.84, 0.89, 0.88, 0.94, 0.92, 0.93, 0.83, 0.93, 0.9, 1.0, 0.65, 0.61, 0.58, 0.69, 0.67, 0.56, 0.71, 0.69, 0.67, 0.8, 0.49, 0.97, 0.93, 0.93, 0.9, 0.94, 1.0, 0.21]}, {"id": "amumal", "t": "아무말 안해도", "en": "WITHOUT A WORD", "src": "media/music/amumal.mp3", "yt": "https://youtu.be/iIyRSIiG6RM", "img": "media/yt/iIyRSIiG6RM.jpg", "dur": 234.96, "peaks": [0.46, 0.6, 0.8, 0.73, 0.74, 0.74, 0.71, 0.65, 0.75, 0.79, 0.77, 0.71, 0.74, 0.8, 0.75, 0.69, 0.95, 0.9, 0.89, 0.88, 0.93, 0.86, 0.84, 0.91, 0.9, 0.83, 0.84, 0.86, 0.86, 0.81, 0.94, 0.93, 0.9, 0.82, 0.88, 0.89, 0.89, 0.88, 0.88, 0.84, 0.86, 0.87, 0.88, 0.85, 0.82, 0.83, 0.89, 0.83, 0.83, 0.85, 0.79, 0.78, 0.69, 0.81, 0.82, 0.82, 0.88, 0.73, 0.56, 0.82, 0.91, 0.84, 0.87, 0.85, 0.88, 0.88, 0.84, 0.87, 0.83, 0.86, 0.86, 0.84, 0.87, 0.85, 0.86, 0.89, 0.9, 0.89, 0.86, 0.87, 0.89, 0.91, 0.89, 0.93, 0.94, 0.89, 0.88, 0.87, 0.88, 0.84, 0.87, 0.88, 0.87, 0.88, 0.85, 0.85, 0.86, 0.88, 0.9, 0.88, 0.89, 0.85, 0.92, 0.87, 0.87, 0.94, 0.9, 0.91, 0.89, 0.9, 0.9, 0.92, 0.92, 0.88, 0.92, 0.9, 0.85, 0.9, 0.83, 0.9, 0.82, 0.77, 0.78, 0.71, 0.77, 0.79, 0.66, 0.86, 0.88, 0.89, 0.88, 0.84, 0.85, 0.88, 0.85, 0.9, 0.92, 0.91, 0.89, 0.85, 0.92, 0.91, 0.91, 0.94, 0.92, 0.97, 0.9, 0.9, 0.96, 0.91, 0.81, 0.79, 0.57, 0.7, 0.77, 0.75, 0.53, 0.83, 0.84, 0.66, 0.79, 0.84, 0.79, 0.7, 0.56, 0.86, 0.82, 0.93, 0.95, 0.9, 0.93, 0.98, 0.88, 0.91, 0.91, 0.91, 0.85, 0.94, 0.99, 0.94, 0.98, 0.9, 0.97, 1.0, 0.97, 0.91, 0.93, 0.93, 1.0, 0.96, 0.96, 0.93, 0.97, 0.94, 0.96, 0.97, 0.85, 0.29, 0.21, 0.08]}, {"id": "starlight", "t": "우리의 별빛 아래", "en": "UNDER OUR STARLIGHT", "src": "media/music/starlight.mp3", "yt": "https://youtu.be/pODF3-DohJo", "img": "media/yt/pODF3-DohJo.jpg", "dur": 221.4, "peaks": [0.45, 0.44, 0.75, 0.76, 0.71, 0.7, 0.69, 0.76, 0.57, 0.63, 0.62, 0.81, 0.81, 0.8, 0.83, 0.85, 0.83, 0.84, 0.8, 0.82, 0.8, 0.84, 0.82, 0.86, 0.85, 0.84, 0.84, 0.73, 0.81, 0.78, 0.77, 0.82, 0.78, 0.81, 0.87, 0.79, 0.8, 0.86, 0.78, 0.81, 0.84, 0.84, 0.85, 0.83, 0.85, 0.86, 0.84, 0.85, 0.85, 0.82, 0.84, 0.78, 0.84, 0.89, 0.86, 0.84, 0.86, 0.84, 0.87, 0.79, 0.81, 0.84, 0.9, 0.89, 0.85, 0.86, 0.91, 0.84, 0.82, 0.85, 0.87, 0.85, 0.86, 0.81, 0.83, 0.84, 0.79, 0.8, 0.8, 0.86, 0.83, 0.87, 0.83, 0.81, 0.88, 0.84, 0.8, 0.82, 0.82, 0.84, 0.86, 0.82, 0.79, 0.78, 0.85, 0.82, 0.77, 0.83, 0.76, 0.84, 0.81, 0.84, 0.78, 0.84, 0.77, 0.73, 0.79, 0.79, 0.79, 0.76, 0.79, 0.8, 0.77, 0.77, 0.84, 0.77, 0.76, 0.81, 0.74, 0.73, 0.81, 0.81, 0.79, 0.88, 0.84, 0.81, 0.78, 0.84, 0.87, 0.82, 0.76, 0.9, 0.86, 0.9, 0.85, 0.7, 0.77, 0.72, 0.64, 0.83, 0.76, 0.8, 0.84, 0.82, 0.87, 0.87, 0.9, 0.93, 0.81, 0.87, 0.85, 0.82, 0.81, 0.88, 0.92, 0.84, 0.91, 0.85, 0.82, 0.83, 0.87, 0.83, 0.82, 0.87, 0.91, 0.92, 0.93, 0.87, 0.86, 0.89, 1.0, 0.86, 0.76, 0.8, 0.92, 0.88, 0.86, 0.86, 0.78, 0.89, 0.87, 0.86, 0.84, 0.88, 0.89, 0.85, 0.8, 0.85, 0.84, 0.8, 0.81, 0.4, 0.47, 0.78, 0.82, 0.91, 0.81, 0.88, 0.85, 0.8]}];   // 자작곡 플레이리스트 (파형 포함)
+TRACKS.forEach((t) => { if (t.id === 'saebyeok4') t.lyr = LYR; });
+
+const $ = (s, r = document) => r.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const corners = '<i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>';
+const pad2 = (n) => String(n).padStart(2, '0');
+
+// 숫자 요약
+$('#stats').innerHTML = [[WORKS.length, '작품'], [CAST.length, '캐릭터'], [WORKS.filter((w) => w.own).length, '자작곡']].map(([n, l]) => `<div><b>${pad2(n)}</b><span>${l}</span></div>`).join('');
+
+// ---------- 첫 화면 모니터: 미리보기가 있는 작품을 차례로 ----------
+const FEAT = WORKS.filter((w) => w.clip);
+const mon = $('#mon-v'); let mi = 0;
+function showMon(i) {
+  mi = (i + FEAT.length) % FEAT.length; const w = FEAT[mi];
+  mon.src = w.clip; mon.style.objectFit = w.tall ? 'contain' : 'cover';
+  $('#mon-title').textContent = w.t; $('#mon-fmt').textContent = w.fmt || 'HD'; $('#mon-idx').textContent = `${pad2(mi + 1)} / ${pad2(FEAT.length)}`;
+  mon.play().catch(() => {});
+}
+mon.addEventListener('ended', () => showMon(mi + 1));
+mon.addEventListener('click', () => openWork(FEAT[mi].id));
+mon.style.cursor = 'pointer';
+showMon(0);
+(function tick() {
+  if (mon.duration) {
+    const t = mon.currentTime;
+    $('#mon-tc').textContent = `00:00:${pad2(Math.floor(t))}:${pad2(Math.floor((t % 1) * 30))}`;
+    $('#mon-bar').style.width = (t / mon.duration * 100) + '%';
+  }
+  requestAnimationFrame(tick);
+})();
+
+// ---------- 작품 카드 ----------
+const grid = $('#grid');
+const tagOf = (w) => w.soon ? ['soon', '업로드 예정'] : w.own ? ['own', '● ORIGINAL'] : ['', w.fmt || w.len];
+grid.innerHTML = WORKS.map((w) => { const [tc, tt] = tagOf(w); return `
+  <article class="card${['sonyeon', 'saebyeok'].includes(w.id) ? ' big' : ''}" data-id="${w.id}" data-k="${w.k.join(' ')}" tabindex="0" role="button" aria-label="${esc(w.t)} 자세히 보기">
+    <div class="frame vf${w.tall ? ' tall' : ''}">${corners}
+      ${w.tall ? `<img class="blur" src="${w.img}" alt="" loading="lazy">` : ''}
+      <img class="${w.tall ? 'fg' : w.clip ? '' : 'still'}" src="${w.img}" alt="${esc(w.t)} 썸네일" loading="lazy">
+      ${w.clip ? `<video muted playsinline loop preload="none" data-src="${w.clip}"></video>` : ''}
+      <span class="tag ${tc}">${esc(tt)}</span>
+    </div>
+    <div class="meta">
+      <div><h3>${esc(w.t)}</h3><div class="en">${esc(w.en)}</div></div>
+      <div class="side"><div class="hud">${w.date}</div><div class="hud">${w.len}</div></div>
+    </div>
+    <div class="by">${esc(w.by)}</div>
+    <div class="kinds">${w.kinds.map((k) => `<span class="kind">${esc(k)}</span>`).join('')}</div>
+  </article>`; }).join('');
+const cards = [...grid.querySelectorAll('.card')];
+function setOn(card, on) {
+  const v = card.querySelector('video'); if (!v) return;
+  if (on) { if (!v.src) v.src = v.dataset.src; v.play().then(() => card.classList.add('on')).catch(() => {}); }
+  else { card.classList.remove('on'); v.pause(); }
+}
+const hover = matchMedia('(hover: hover)').matches;
+cards.forEach((c) => {
+  if (hover) { c.addEventListener('mouseenter', () => setOn(c, true)); c.addEventListener('mouseleave', () => setOn(c, false)); }
+  c.addEventListener('click', () => openWork(c.dataset.id));
+  c.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openWork(c.dataset.id); } });
+});
+if (!hover && 'IntersectionObserver' in window) {   // 터치 화면: 화면 가운데에 온 카드만 재생
+  const io = new IntersectionObserver((es) => es.forEach((e) => setOn(e.target, e.intersectionRatio > 0.7)), { threshold: [0, 0.7, 1] });
+  cards.forEach((c) => io.observe(c));
+}
+document.querySelectorAll('.chip').forEach((b) => b.addEventListener('click', () => {
+  document.querySelectorAll('.chip').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+  const f = b.dataset.f; cards.forEach((c) => { c.hidden = f !== 'all' && !c.dataset.k.split(' ').includes(f); });
+}));
+
+// ---------- 작품 창 ----------
+const dlg = $('#dlg'), dv = $('#dlg-v'), di = $('#dlg-i'); let cur = null;
+function openWork(id) {
+  const w = WORKS.find((x) => x.id === id); cur = w;
+  if (w.clip) { di.hidden = true; dv.hidden = false; dv.src = w.clip; dv.style.objectFit = w.tall ? 'contain' : 'cover'; dv.play().catch(() => {}); }
+  else { dv.pause(); dv.removeAttribute('src'); dv.hidden = true; di.hidden = false; di.src = w.img; di.alt = w.t; }
+  $('#dlg-t').textContent = w.t; $('#dlg-by').textContent = `${w.by} · ${w.date} · ${w.len}`; $('#dlg-d').textContent = w.d;
+  const yt = $('#dlg-yt'); yt.href = w.yt; yt.textContent = w.soon ? '채널 방문 (곧 공개)' : w.yt === CH ? '유튜브 채널에서 보기' : '유튜브에서 전체 보기';
+  $('#dlg-log').hidden = !LOGS[w.id];
+  if (!dlg.open) dlg.showModal();
+}
+$('#dlg-x').addEventListener('click', () => dlg.close());
+dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+dlg.addEventListener('close', () => dv.pause());
+$('#dlg-log').addEventListener('click', () => { dlg.close(); pickLog(cur.id); $('#logs').scrollIntoView(); });
+
+// ---------- 캐릭터 ----------
+$('#rail').innerHTML = CAST.map((c) => `
+  <article class="char">
+    <div class="pic vf">${corners}<img src="${c.img}" alt="${esc(c.n)}" loading="lazy"><span class="work">${esc(c.w)}</span></div>
+    <div class="nm"><b>${esc(c.n)}</b><span>${esc(c.en)}</span></div>
+    <div class="role">${esc(c.role)}</div>
+    <p>${esc(c.p)}</p>
+    <div class="traits">${c.tr.map((t) => `<span class="kind">${esc(t)}</span>`).join('')}</div>
+  </article>`).join('');
+
+// ---------- 음악: 자작곡 플레이리스트 + 파형 + (있으면) 가사 따라가기 ----------
+const aud = $('#aud'), cv = $('#wave'), ctx = cv.getContext('2d'), lyr = $('#lyr');
+const fmt = (s) => `${Math.floor(s / 60)}:${pad2(Math.floor(s % 60))}`;
+let T = TRACKS[0], lines = [], last = -1;
+$('#tracks').innerHTML = TRACKS.map((t, i) => `<li data-i="${i}"><img src="${t.img}" alt="" loading="lazy"><div><b>${esc(t.t)}</b><small>${esc(t.en)}</small></div><span class="d">${fmt(t.dur)}</span></li>`).join('');
+const rows = [...$('#tracks').children];
+function load(i, play) {
+  T = TRACKS[i]; aud.src = T.src; last = -1;
+  $('#p-img').src = T.img; $('#p-img').alt = T.t + ' 커버'; $('#p-t').textContent = T.t; $('#p-en').textContent = T.en; $('#p-yt').href = T.yt;
+  rows.forEach((r, k) => r.classList.toggle('on', k === i));
+  lyr.hidden = !T.lyr;
+  lyr.innerHTML = T.lyr ? T.lyr.map(([a, , txt]) => `<p data-t="${a}">${esc(txt)}</p>`).join('') : '';
+  lines = [...lyr.children];
+  lines.forEach((l) => l.addEventListener('click', () => { aud.currentTime = +l.dataset.t; aud.play(); }));
+  lyr.scrollTop = 0;
+  if (play) aud.play().catch(() => {});
+  sync();
+}
+function draw() {
+  const r = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
+  if (cv.width !== Math.round(w * r)) { cv.width = Math.round(w * r); cv.height = Math.round(h * r); }
+  ctx.setTransform(r, 0, 0, r, 0, 0); ctx.clearRect(0, 0, w, h);
+  const css = getComputedStyle(document.documentElement), on = css.getPropertyValue('--accent').trim(), off = css.getPropertyValue('--line-2').trim();
+  const n = T.peaks.length, bw = w / n, p = (aud.currentTime || 0) / T.dur;
+  T.peaks.forEach((v, i) => { const bh = Math.max(2, v * (h - 6)); ctx.fillStyle = i / n < p ? on : off; ctx.fillRect(i * bw + bw * 0.2, (h - bh) / 2, Math.max(1, bw * 0.6), bh); });
+}
+function sync() {
+  const t = aud.currentTime || 0;
+  $('#time').textContent = `${fmt(t)} / ${fmt(T.dur)}`;
+  if (T.lyr) {
+    let k = -1; for (let i = 0; i < T.lyr.length; i++) if (t >= T.lyr[i][0] - 0.15) k = i;
+    if (k !== last) { lines.forEach((l, i) => l.classList.toggle('on', i === k)); if (k >= 0) lyr.scrollTo({ top: lines[k].offsetTop - lyr.clientHeight / 2 + 20, behavior: 'smooth' }); last = k; }
+  }
+  draw();
+  if (!aud.paused) requestAnimationFrame(sync);
+}
+const ICON = { play: '<path d="M8 5.5v13l11-6.5L8 5.5Z"/>', pause: '<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>' };
+$('#play').addEventListener('click', () => { if (aud.paused) aud.play().catch(() => {}); else aud.pause(); });
+aud.addEventListener('play', () => { $('#play-ic').innerHTML = ICON.pause; $('#play').setAttribute('aria-label', '일시정지'); mon.pause(); sync(); });
+aud.addEventListener('pause', () => { $('#play-ic').innerHTML = ICON.play; $('#play').setAttribute('aria-label', '재생'); });
+aud.addEventListener('ended', () => load((TRACKS.indexOf(T) + 1) % TRACKS.length, true));   // 다음 곡으로
+const seek = (e) => { const r = cv.getBoundingClientRect(); aud.currentTime = Math.min(T.dur - 0.1, Math.max(0, (e.clientX - r.left) / r.width * T.dur)); sync(); };
+cv.addEventListener('pointerdown', (e) => { cv.setPointerCapture(e.pointerId); seek(e); cv.onpointermove = seek; });
+cv.addEventListener('pointerup', () => { cv.onpointermove = null; });
+rows.forEach((r) => r.addEventListener('click', () => load(+r.dataset.i, true)));
+addEventListener('resize', draw);
+load(0, false);
+
+// ---------- 제작 기록 (기록이 있는 작품만) ----------
+const LW = WORKS.filter((w) => LOGS[w.id]);
+$('#tabs').innerHTML = LW.map((w) => `<button class="tab" role="tab" id="tab-${w.id}" data-id="${w.id}" aria-selected="false">${esc(w.t)}</button>`).join('');
+$('#logbox').innerHTML = LW.map((w) => { const L = LOGS[w.id]; return `
+  <div class="log" role="tabpanel" id="log-${w.id}" aria-labelledby="tab-${w.id}" hidden>
+    <div class="sum">
+      <div class="hud">${w.date} · ${w.len}${w.fmt ? ' · ' + esc(w.fmt) : ''}</div>
+      <h3 style="margin-top:10px">${esc(w.t)}</h3><div class="by">${esc(w.by)}</div>
+      <div class="facts">${L.facts.map(([b, s]) => `<div><b>${esc(b)}</b><span>${esc(s)}</span></div>`).join('')}</div>
+    </div>
+    <ol class="steps">${L.steps.map(([b, p]) => `<li><b>${esc(b)}</b><p>${esc(p)}</p></li>`).join('')}</ol>
+  </div>`; }).join('');
+function pickLog(id) {
+  document.querySelectorAll('.tab').forEach((t) => t.setAttribute('aria-selected', String(t.dataset.id === id)));
+  document.querySelectorAll('.log').forEach((p) => { p.hidden = p.id !== 'log-' + id; });
+}
+document.querySelectorAll('.tab').forEach((t) => t.addEventListener('click', () => pickLog(t.dataset.id)));
+pickLog(LW[0].id);
+</script>
+</body>
+</html>
